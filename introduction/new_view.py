@@ -9,15 +9,15 @@ connection = sqlite3.connect(":memory:")
 connection.cursor().execute("CREATE TABLE Users (name, phone)")
 connection.cursor().execute("INSERT INTO Users VALUES ('Jenny','867-5309')")
 
-@csrf_exempt
 @receiver(request_finished)
+@csrf_exempt
 def bad_query(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         phone = request.POST.get('phone')
 
-        query = "SELECT * FROM Users WHERE name ='" + name + "' AND phone = '" + phone + "'"
-        result = connection.cursor().execute(query)
+        query = "SELECT * FROM Users WHERE name =?" + " AND phone = ?"
+        result = connection.cursor().execute(query, (name, phone, ))
         return render(request, 'result.html', {'result': result})
     else:
         return redirect('/')
