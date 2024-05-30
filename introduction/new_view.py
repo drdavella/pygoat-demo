@@ -16,8 +16,8 @@ def bad_query(request):
         name = request.POST.get('name')
         phone = request.POST.get('phone')
 
-        query = "SELECT * FROM Users WHERE name ='" + name + "' AND phone = '" + phone + "'"
-        result = connection.cursor().execute(query)
+        query = "SELECT * FROM Users WHERE name =?" + " AND phone = ?"
+        result = connection.cursor().execute(query, (name, phone, ))
         return render(request, 'result.html', {'result': result})
     else:
         return redirect('/')
